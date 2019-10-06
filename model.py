@@ -1,3 +1,5 @@
+from keras.layers import LSTM,Dense,Embedding
+
 from keras.models import Model
 from keras.layers import Input, LSTM, Dense
 
@@ -35,32 +37,4 @@ def build_model(num_encoder_tokens,num_decoder_tokens,latent_dim):
         return model
 
 
-        #
-        # # Next: inference mode (sampling).
-        # # Here's the drill:
-        # # 1) encode input and retrieve initial decoder state
-        # # 2) run one step of decoder with this initial state
-        # # and a "start of sequence" token as target.
-        # # Output will be the next target token
-        # # 3) Repeat with the current target token and current states
-        #
-        # # Define sampling models
-        # encoder_model = Model(encoder_inputs, encoder_states)
-        #
-        # decoder_state_input_h = Input(shape=(latent_dim,))
-        # decoder_state_input_c = Input(shape=(latent_dim,))
-        # decoder_states_inputs = [decoder_state_input_h, decoder_state_input_c]
-        # decoder_outputs, state_h, state_c = decoder_lstm(
-        #     decoder_inputs, initial_state=decoder_states_inputs)
-        # decoder_states = [state_h, state_c]
-        # decoder_outputs = decoder_dense(decoder_outputs)
-        # decoder_model = Model(
-        #     [decoder_inputs] + decoder_states_inputs,
-        #     [decoder_outputs] + decoder_states)
-        #
-        # # Reverse-lookup token index to decode sequences back to
-        # # something readable.
-        # reverse_input_char_index = dict(
-        #     (i, char) for char, i in input_token_index.items())
-        # reverse_target_char_index = dict(
-        #     (i, char) for char, i in target_token_index.items())
+
