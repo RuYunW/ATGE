@@ -21,7 +21,7 @@ context_model.add(Embedding(vocab_size,embed_size,
 context_model.add(Reshape((embed_size,)))
 
 model = Sequential()
-model.add(merge([word_model,context_model],mode = 'dot'))
+model.add(merge([word_model.output,context_model.output],mode = 'dot'))
 model.add(Dense(1,init = "glorot_uniform",activation = 'sigmoid'))
 model.compile(loss = 'mean_squared_error' , optimizer = "adam")
 
