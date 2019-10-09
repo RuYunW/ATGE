@@ -5,8 +5,8 @@ Tag-graph embedding generation algorithm
 from TGEutils import *
 import numpy as np
 from numpy import *
-from keras.layers import LSTM,Dense,Dropout
-from keras.models import Sequential
+from keras_seq2seq.layers import LSTM,Dense,Dropout
+from keras_seq2seq.models import Sequential
 
 # Initialize
 # x,cites,content,class_set,code_length = load_data(cites_path = './data/cited.txt',content_path = './data/content.txt')

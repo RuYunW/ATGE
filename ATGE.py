@@ -13,7 +13,7 @@ def load_data(path):
               "9": "nine", "10": "ten", "11": "eleven", "12": "twelve", "0": "zero"}
     docs_source = []
     docs_target = []
-    for i in range(100):
+    for i in range(10000):
         doc_len = random.randint(1, 8)
         doc_source = []
         doc_target = []
@@ -98,7 +98,8 @@ for i in target_batch:
 model = build_test_model(max_source_len, max_target_len)
 model.compile(optimizer='rmsprop', loss='categorical_crossentropy',
               metrics=['accuracy'])
-model.fit([encoder_input_data, decoder_input_data], decoder_target_data,
+# encoder_input_data = np.array(encoder_input_data).reshape(len(encoder_input_data),-1)
+model.fit(np.array(encoder_input_data), np.array(decoder_target_data),
           batch_size=64,
           epochs=10,
           validation_split=0.2)

@@ -2,17 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="379e7c65-39dc-4905-87c0-9352e5d67442" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/TGEmodel.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/TGEutils.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/cited.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/content.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/cora.cites" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/cora.content" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/model_seq2seq_contrib.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/keras_seq2seq.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/book.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/train_model.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ATGE.py" beforeDir="false" afterPath="$PROJECT_DIR$/ATGE.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TGEmodel.py" beforeDir="false" afterPath="$PROJECT_DIR$/TGEmodel.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TGEutils.py" beforeDir="false" afterPath="$PROJECT_DIR$/TGEutils.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/model.py" beforeDir="false" afterPath="$PROJECT_DIR$/model.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/s2s.h5" beforeDir="false" afterPath="$PROJECT_DIR$/s2s.h5" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -25,17 +21,35 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ATGE.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="237">
-              <caret line="96" lean-forward="true" selection-start-line="96" selection-end-line="96" />
+            <state relative-caret-position="-1028">
+              <caret line="49" column="20" lean-forward="true" selection-start-line="49" selection-start-column="20" selection-end-line="49" selection-end-column="20" />
+              <folding>
+                <element signature="e#0#33#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/model.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="69">
+              <caret line="42" selection-start-line="42" selection-end-line="42" />
+              <folding>
+                <element signature="e#0#45#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/model.py">
+        <entry file="file://$PROJECT_DIR$/keras_seq2seq.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="207">
-              <caret line="12" lean-forward="true" selection-start-line="12" selection-end-line="12" />
+            <state relative-caret-position="161">
+              <caret line="7" column="23" lean-forward="true" selection-start-line="7" selection-start-column="23" selection-end-line="7" selection-end-column="23" />
+              <folding>
+                <element signature="e#2096#2133#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -60,11 +74,13 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/ATGE.py" />
         <option value="$PROJECT_DIR$/modesl.py" />
         <option value="$PROJECT_DIR$/utils.py" />
         <option value="$PROJECT_DIR$/train_model.py" />
+        <option value="$PROJECT_DIR$/ATGE.py" />
         <option value="$PROJECT_DIR$/model.py" />
+        <option value="$PROJECT_DIR$/keras.py" />
+        <option value="$PROJECT_DIR$/keras_seq2seq.py" />
       </list>
     </option>
   </component>
@@ -80,7 +96,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -88,10 +103,16 @@
               <item name="ATGE" type="b2602c69:ProjectViewProjectNode" />
               <item name="ATGE" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="ATGE" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ATGE" type="462c0819:PsiDirectoryNode" />
+              <item name="fra-eng" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -120,7 +141,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.train_model">
+  <component name="RunManager" selected="Python.keras_seq2seq">
     <configuration name="ATGE" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="ATGE" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -135,6 +156,28 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/ATGE.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="keras_seq2seq" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="ATGE" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/keras_seq2seq.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -189,9 +232,10 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.keras_seq2seq" />
+        <item itemvalue="Python.ATGE" />
         <item itemvalue="Python.train_model" />
         <item itemvalue="Python.model" />
-        <item itemvalue="Python.ATGE" />
       </list>
     </recent_temporary>
   </component>
@@ -209,6 +253,8 @@
       <workItem from="1569671769988" duration="10185000" />
       <workItem from="1569717171192" duration="6026000" />
       <workItem from="1570457337019" duration="1278000" />
+      <workItem from="1570546565884" duration="1794000" />
+      <workItem from="1570587748226" duration="3222000" />
     </task>
     <task id="LOCAL-00001" summary="meet the old problem that the expected dim is different from the input dim">
       <created>1570457381956</created>
@@ -217,22 +263,29 @@
       <option name="project" value="LOCAL" />
       <updated>1570457381956</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="upload add files">
+      <created>1570546741544</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1570546741544</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="18279000" />
+    <option name="totallyTimeSpent" value="23295000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1295" height="735" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.261924" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2700081" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.31011608" />
+      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.38142622" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -255,11 +308,13 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="meet the old problem that the expected dim is different from the input dim" />
-    <option name="LAST_COMMIT_MESSAGE" value="meet the old problem that the expected dim is different from the input dim" />
+    <MESSAGE value="upload add files" />
+    <option name="LAST_COMMIT_MESSAGE" value="upload add files" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/ATGE$train_model.coverage" NAME="train_model Coverage Results" MODIFIED="1569725554693" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/ATGE$ATGE.coverage" NAME="ATGE Coverage Results" MODIFIED="1569676768280" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/ATGE$ATGE.coverage" NAME="ATGE Coverage Results" MODIFIED="1570589483097" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/ATGE$keras_seq2seq.coverage" NAME="keras_seq2seq Coverage Results" MODIFIED="1570591437871" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/ATGE$model.coverage" NAME="model Coverage Results" MODIFIED="1569724411281" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
   <component name="editorHistoryManager">
@@ -273,15 +328,31 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/ATGE.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="237">
-          <caret line="96" lean-forward="true" selection-start-line="96" selection-end-line="96" />
+        <state relative-caret-position="-1028">
+          <caret line="49" column="20" lean-forward="true" selection-start-line="49" selection-start-column="20" selection-end-line="49" selection-end-column="20" />
+          <folding>
+            <element signature="e#0#33#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/model.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="207">
-          <caret line="12" lean-forward="true" selection-start-line="12" selection-end-line="12" />
+        <state relative-caret-position="69">
+          <caret line="42" selection-start-line="42" selection-end-line="42" />
+          <folding>
+            <element signature="e#0#45#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/keras_seq2seq.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="161">
+          <caret line="7" column="23" lean-forward="true" selection-start-line="7" selection-start-column="23" selection-end-line="7" selection-end-column="23" />
+          <folding>
+            <element signature="e#2096#2133#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

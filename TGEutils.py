@@ -1,9 +1,9 @@
 import numpy as np
 # from model import *
-from keras.layers import LSTM,Dense,Dropout,Embedding,Flatten,ConvLSTM2D
-from keras.models import Sequential
-from keras.optimizers import Adam
-from keras.layers.convolutional import Conv1D,MaxPooling1D
+from keras_seq2seq.layers import LSTM,Dense,Dropout,Embedding,Flatten,ConvLSTM2D
+from keras_seq2seq.models import Sequential
+from keras_seq2seq.optimizers import Adam
+from keras_seq2seq.layers.convolutional import Conv1D,MaxPooling1D
 
 def load_data(cites_path = './data/cora.cites',content_path = './data/cora.content'):
 
