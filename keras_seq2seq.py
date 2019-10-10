@@ -58,7 +58,7 @@ import numpy as np
 batch_size = 64  # Batch size for training.
 epochs = 100  # Number of epochs to train for.
 latent_dim = 256  # Latent dimensionality of the encoding space.
-num_samples = 10000  # Number of samples to train on.
+num_samples = 100  # Number of samples to train on.
 # Path to the data txt file on disk.
 data_path = 'fra-eng/fra.txt'
 
@@ -76,12 +76,16 @@ for line in lines[: min(num_samples, len(lines) - 1)]:
     target_text = '\t' + target_text + '\n'
     input_texts.append(input_text)
     target_texts.append(target_text)
-    for char in input_text:
+    for char in input_text.split(' '):
         if char not in input_characters:
             input_characters.add(char)
-    for char in target_text:
+    for char in target_text.split(' '):
         if char not in target_characters:
             target_characters.add(char)
+
+for i in input_characters:
+    print(i)
+
 
 input_characters = sorted(list(input_characters))
 target_characters = sorted(list(target_characters))
@@ -103,15 +107,16 @@ target_token_index = dict(
 
 encoder_input_data = np.zeros(
     (len(input_texts), max_encoder_seq_length, num_encoder_tokens),
-    dtype='float32')
+    dtype='float16')
 decoder_input_data = np.zeros(
     (len(input_texts), max_decoder_seq_length, num_decoder_tokens),
-    dtype='float32')
+    dtype='float16')
 decoder_target_data = np.zeros(
     (len(input_texts), max_decoder_seq_length, num_decoder_tokens),
-    dtype='float32')
+    dtype='float16')
 
 for i, (input_text, target_text) in enumerate(zip(input_texts, target_texts)):
+
     for t, char in enumerate(input_text):
         encoder_input_data[i, t, input_token_index[char]] = 1.
     encoder_input_data[i, t + 1:, input_token_index[' ']] = 1.
