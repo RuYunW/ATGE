@@ -7,22 +7,18 @@ from model import *
 # from model_seq2seq import Seq2seq
 
 # 生成真实的 input 和 output，存储于 list
-def load_data(path):
-    num2en = {"1": "one", "2": "two", "3": "three", "4": "four", "5": "five", "6": "six", "7": "seven", "8": "eight",
-              "9": "nine", "10": "ten", "11": "eleven", "12": "twelve", "0": "zero"}
+def load_data(source_path,target_path):
     docs_source = []
     docs_target = []
-    for i in range(1000):
-        doc_len = random.randint(1, 8)
-        doc_source = []
-        doc_target = []
-        for j in range(doc_len):
-            num = str(random.randint(0, 12))
-            doc_source.append(num)
-            num = str(random.randint(0, 12))
-            doc_target.append(num2en[num])
-        docs_source.append(doc_source)
-        docs_target.append(doc_target)
+    with open(source_path,'r') as fs:
+        lines = fs.readlines()
+        for line in lines[:1000]:
+            docs_source.append(line)
+
+    with open(target_path,'r') as ft:
+        lines = ft.readlines()
+        for line in lines[:1000]:
+            docs_target.append(line)
 
     return docs_source, docs_target
 
@@ -83,7 +79,7 @@ def add_padding(docs_source, docs_target):
     return source_batch, target_batch, max_source_len, max_target_len
 
 
-docs_source, docs_target = load_data('')
+docs_source, docs_target = load_data('./data/describe.txt', './data/all_method.txt')
 source_batch, target_batch, max_source_len, max_target_len = add_padding(docs_source,docs_target)
 
 encoder_input_data = source_batch
@@ -98,8 +94,8 @@ model = build_test_model(max_source_len, max_target_len,len(encoder_input_data),
 model.compile(optimizer='rmsprop', loss='categorical_crossentropy',
               metrics=['accuracy'])
 # encoder_input_data = np.array(encoder_input_data).reshape(len(encoder_input_data),-1)
-model.fit(np.array(encoder_input_data).reshape(int(len(encoder_input_data)/10), 10, max_source_len),
-          np.array(decoder_target_data).reshape(int(len(decoder_input_data)/10), 10, max_target_len-2),
+model.fit(np.array(encoder_input_data).reshape(len(encoder_input_data), 1, max_source_len),
+          np.array(decoder_target_data).reshape(len(decoder_input_data), 1, max_target_len-2),
           batch_size=64,
           epochs=10,
           validation_split=0.2)

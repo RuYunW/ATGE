@@ -3,8 +3,9 @@ from keras import Model
 from keras.layers import Input, LSTM, Dense
 
 def build_test_model(max_source_len, max_target_len, encoder_len, decoder_len):
-    inputs = Input(shape=(10, max_source_len))
-    outputs = LSTM(8, activation='relu', return_sequences=True)(inputs)
+    inputs = Input(shape=(1, max_source_len))
+    x = LSTM(max_source_len, activation='relu', return_sequences=True)(inputs)
+    outputs = LSTM(max_target_len-2, activation='relu', return_sequences=True)(x)
 
     # dense_outputs= LSTM(8)(x)
 
