@@ -2,7 +2,6 @@ import tensorflow.compat.v1 as tf
 import numpy as np
 import random
 import time
-from model_seq2seq_contrib import Seq2seq
 from model import *
 
 # from model_seq2seq import Seq2seq
@@ -13,7 +12,7 @@ def load_data(path):
               "9": "nine", "10": "ten", "11": "eleven", "12": "twelve", "0": "zero"}
     docs_source = []
     docs_target = []
-    for i in range(10000):
+    for i in range(1000):
         doc_len = random.randint(1, 8)
         doc_source = []
         doc_target = []
@@ -95,14 +94,16 @@ for i in target_batch:
     i.remove(2)
     decoder_input_data.append(i)
 
-model = build_test_model(max_source_len, max_target_len)
+model = build_test_model(max_source_len, max_target_len,len(encoder_input_data),len(decoder_input_data))
 model.compile(optimizer='rmsprop', loss='categorical_crossentropy',
               metrics=['accuracy'])
 # encoder_input_data = np.array(encoder_input_data).reshape(len(encoder_input_data),-1)
-model.fit(np.array(encoder_input_data), np.array(decoder_target_data),
+model.fit(np.array(encoder_input_data).reshape(int(len(encoder_input_data)/10), 10, max_source_len),
+          np.array(decoder_target_data).reshape(int(len(decoder_input_data)/10), 10, max_target_len-2),
           batch_size=64,
           epochs=10,
           validation_split=0.2)
+
 # Save model
 model.save('s2s.h5')
 

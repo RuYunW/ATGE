@@ -1,17 +1,16 @@
-from keras_seq2seq.layers import LSTM,Dense,Embedding
-from keras_seq2seq.models import Model
-from keras_seq2seq.layers import Input, LSTM, Dense
+# from keras.layers import LSTM,Dense,Embedding
+from keras import Model
+from keras.layers import Input, LSTM, Dense
 
-def build_test_model(max_source_len, max_target_len):
-    dense_inputs = Input(shape=(max_source_len,))
-    x = Dense(8,activation='relu')(dense_inputs)
-    dense_outputs = LSTM(8)(x)
+def build_test_model(max_source_len, max_target_len, encoder_len, decoder_len):
+    inputs = Input(shape=(10, max_source_len))
+    outputs = LSTM(8, activation='relu', return_sequences=True)(inputs)
 
     # dense_outputs= LSTM(8)(x)
 
     # Define the model that will turn
     # `encoder_input_data` & `decoder_input_data` into `decoder_target_data`
-    model = Model(dense_inputs, dense_outputs)
+    model = Model(inputs, outputs)
     return model
 
 # def build_model(num_encoder_tokens, num_decoder_tokens, latent_dim):

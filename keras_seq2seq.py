@@ -115,9 +115,9 @@ decoder_target_data = np.zeros(
     (len(input_texts), max_decoder_seq_length, num_decoder_tokens),
     dtype='float16')
 
+# one-hot
 for i, (input_text, target_text) in enumerate(zip(input_texts, target_texts)):
-
-    for t, char in enumerate(input_text):
+    for t, char in enumerate(input_text.split(' ')):
         encoder_input_data[i, t, input_token_index[char]] = 1.
     encoder_input_data[i, t + 1:, input_token_index[' ']] = 1.
     for t, char in enumerate(target_text):
