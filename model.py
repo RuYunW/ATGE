@@ -3,15 +3,14 @@ from keras import Model
 from keras.layers import Input, LSTM, Dense
 
 def build_test_model(max_source_len, max_target_len, encoder_len, decoder_len):
-    inputs = Input(shape=(1, max_source_len))
-    x = LSTM(max_source_len, activation='relu', return_sequences=True)(inputs)
+    encoder_inputs = Input(shape=(1, max_source_len))
+    encoder = LSTM(max_source_len, return_state=True)(encoder_inputs)
+    encoder_outputs, state_h, state_c = encoder(encoder_inputs)
+    encoder_state = [state_h, state_c]
+
     outputs = LSTM(max_target_len-2, activation='relu', return_sequences=True)(x)
 
-    # dense_outputs= LSTM(8)(x)
-
-    # Define the model that will turn
-    # `encoder_input_data` & `decoder_input_data` into `decoder_target_data`
-    model = Model(inputs, outputs)
+    model = Model(encoder_inputs, outputs)
     return model
 
 # def build_model(num_encoder_tokens, num_decoder_tokens, latent_dim):

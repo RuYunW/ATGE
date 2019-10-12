@@ -3,6 +3,7 @@ import numpy as np
 import random
 import time
 from model import *
+from node_onehot_generate import get_node_onehot
 
 # from model_seq2seq import Seq2seq
 
@@ -35,7 +36,6 @@ def make_vocab(docs):
                 i2w[len(w2i)] = w
                 w2i[w] = len(w2i)
     return w2i, i2w
-
 
 # 将 doc 中每一句话，转换为 index list 的形式，如 [1, 11, 5, 14, 2, 0, 0, 0, 0, 0]
 def doc_to_seq(docs):
@@ -90,7 +90,8 @@ for i in target_batch:
     i.remove(2)
     decoder_input_data.append(i)
 
-model = build_test_model(max_source_len, max_target_len,len(encoder_input_data),len(decoder_input_data))
+node_onthot = get_node_onehot('./data/method_io.xlsx')  # 获取节点 one-hot 编码
+model = build_test_model(max_source_len, max_target_len, len(encoder_input_data), len(decoder_input_data))
 model.compile(optimizer='rmsprop', loss='categorical_crossentropy',
               metrics=['accuracy'])
 # encoder_input_data = np.array(encoder_input_data).reshape(len(encoder_input_data),-1)
