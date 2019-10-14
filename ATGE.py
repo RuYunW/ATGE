@@ -1,9 +1,6 @@
-import tensorflow.compat.v1 as tf
 import numpy as np
-import random
-import time
 from model import *
-from node_onehot_generate import get_node_onehot
+from data_generate.data_generate_utils import get_node_onehot
 
 # from model_seq2seq import Seq2seq
 
