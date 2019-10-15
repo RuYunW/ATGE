@@ -2,13 +2,18 @@ from data_generate.data_generate_utils import *
 
 # Deviding the original dataset into program & describe two parts
 dataset = load_dataset('../data/test.json')  # list
-program,describe = fileDev(dataset)
+program, describe = fileDev(dataset)
 
 # Conclude the Signature information from program
 method = conclude_signature(program)
 
 # make the method into three parts
 inlist, outlist, method_list = generate_io(method)
+
+print(inlist)
+print(outlist)
+print(method_list)
+exit()
 
 # using iolist generate node ont-hot code
 node_onehot_code = get_node_onehot(inlist, outlist)

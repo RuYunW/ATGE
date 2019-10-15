@@ -60,7 +60,7 @@ def conclude_signature(data):
     for i in temp:
         if len(str(i)) >= 2:
             method.append(i)
-
+    # len(method) = 3,000
     return method
 
 
@@ -89,15 +89,20 @@ def generate_io(data):
             input_class.append(i.split(' ')[0].replace('[','').replace(']','').replace('\'',''))
         inlist.append(input_class)
         outlist.append(output)
-        method_name = re.findall(r'.*? (.*?)\(.*?\)',method)
+        method_name = re.findall(r'.*? (.*?)\(.*?\)', method)
         method_list.append(method_name)
 
+
     # 去空
-    for i in range(len(method_list)):
-        if inlist[i] == '' or outlist == '':
-            method_list.remove(method_list[i])
-            inlist.remove(inlist[i])
-            outlist.remove(outlist[i])
+    i = 0
+    while i < len(method_list):
+        if len(inlist[i]) == 0 or len(outlist[i]) == 0 or len(method_list[i]) == 0 \
+                or inlist[i] == None or outlist[i] == None or method_list[i] == None:
+            method_list.pop(i)
+            inlist.pop(i)
+            outlist.pop(i)
+            i -= 1
+        i += 1
 
     return inlist,outlist,method_list
 
@@ -106,8 +111,6 @@ def generate_io(data):
 将数据集转化为cora.cite格式，
 cited_paper_id \t citing_paper_id
 '''
-
-
 
 def cited2citing(input, output, method):
     row = len(method)
@@ -122,7 +125,7 @@ def cited2citing(input, output, method):
     final = []
     for i in range(row):
         for ins in input[i]:
-            if ins == 'int' or ins=='long' or ins == 'float' or ins=='double' or ins=='boolean' or ins == "String" or ins == 'Object' or ins == 'byte':
+            if ins == 'int' or ins == 'char' or ins =='long' or ins == 'float' or ins=='double' or ins=='boolean' or ins == "String" or ins == 'Object' or ins == 'byte':
                 # print("skip")
                 continue
             for j in range(row):
@@ -184,7 +187,7 @@ def content_file_generation(node_onehot_code):
         for j in range(len(lines)):
             if str(i+1) == str(lines[j].split('\t')[0]):
                 node.append(lines[j].split('\t')[1].replace('\n',''))
-        print(node)
+        # print(node)
         node_list.append(node)
         node = []
 
