@@ -104,7 +104,7 @@ def generate_io(data):
             i -= 1
         i += 1
 
-    return inlist,outlist,method_list
+    return inlist, outlist, method_list
 
 
 '''

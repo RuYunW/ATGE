@@ -27,7 +27,7 @@ def load_data(cites_path = '../data/cited.txt',content_path = '../data/content.t
         content.append(line.replace('\n','').split('\t'))
 
     class_set = set(np.array(content[:])[:,-1])
-    return x,cites,content,class_set,code_length
+    return x, cites, content, class_set, code_length
 # load_data()
 
 # def LSTM():
