@@ -1,24 +1,24 @@
 import numpy as np
 from model import *
 from data_generate.data_generate_utils import get_node_onehot
-
+from TagGraphEmbedding.TGEmodel import return_var
 # from model_seq2seq import Seq2seq
 
+# os.environ["CUDA_VISIBLE_DEVICES"] = '0' #use GPU with ID=0
+# config = tf.ConfigProto()
+# config.gpu_options.per_process_gpu_memory_fraction = 0.5 # maximun alloc gpu50% of MEM
+# config.gpu_options.allow_growth = True #allocate dynamically
+
 # 生成真实的 input 和 output，存储于 list
-def load_data(source_path,target_path):
-    docs_source = []
-    docs_target = []
+def load_data(source_path):
+    inputNL = []
     with open(source_path,'r') as fs:
         lines = fs.readlines()
-        for line in lines[:1000]:
-            docs_source.append(line)
+        for line in lines:
+            inputNL.append(line)
+    input_onehot, output_onehot = return_var()
 
-    with open(target_path,'r') as ft:
-        lines = ft.readlines()
-        for line in lines[:1000]:
-            docs_target.append(line)
-
-    return docs_source, docs_target
+    return inputNL, input_onehot, output_onehot
 
 
 # 生成 doc 中所有词的词汇表
@@ -50,44 +50,35 @@ def doc_to_seq(docs):
     return seqs, w2i, i2w
 
 
-# 将 整理好的 input 和 output 转换为添加了 padding 的 index 形式
-def add_padding(docs_source, docs_target):
+# 将 整理好的 input 转换为添加了 padding 的 index 形式
+def add_padding(docs_source):
     # 生成单词表
     w2i_source, i2w_source = make_vocab(docs_source)
-    w2i_target, i2w_target = make_vocab(docs_target)
-
     # 寻找最大长度
     source_lens = [len(i) for i in docs_source]
-    target_lens = [len(i)+2 for i in docs_target]
     max_source_len = max(source_lens)
-    max_target_len = max(target_lens)
-
     source_batch = []
-    target_batch = []
     # 添加 padding
     for i in range(len(docs_source)):
         source_seq = [w2i_source[w] for w in docs_source[i]] + [w2i_source["_PAD"]] * (
                     max_source_len - len(docs_source[i]))
-        target_seq = [w2i_target["_GO"]]+[w2i_target[w] for w in docs_target[i]] + [w2i_target["_EOS"]] + [w2i_target["_PAD"]] * (
-                    max_target_len - 2 - len(docs_target[i]))
         source_batch.append(source_seq)
-        target_batch.append(target_seq)
 
-    return source_batch, target_batch, max_source_len, max_target_len
+    return source_batch, max_source_len
 
 
-docs_source, docs_target = load_data('./data/describe.txt', './data/all_method.txt')
-source_batch, target_batch, max_source_len, max_target_len = add_padding(docs_source,docs_target)
+inputNL, input_onehot, output_onehot = load_data('./data/describe.txt')
+source_batch, max_source_len = add_padding(inputNL)
 
 encoder_input_data = source_batch
-decoder_target_data = target_batch
-decoder_input_data = []
-for i in target_batch:
-    i.remove(1)
-    i.remove(2)
-    decoder_input_data.append(i)
 
-node_onthot = get_node_onehot('./data/method_io.xlsx')  # 获取节点 one-hot 编码
+print(len(inputNL))
+print(len(output_onehot))
+print(len(input_onehot))
+
+exit()
+
+node_onehot = get_node_onehot('./data/method_io.xlsx')  # 获取节点 one-hot 编码
 model = build_test_model(max_source_len, max_target_len, len(encoder_input_data), len(decoder_input_data))
 model.compile(optimizer='rmsprop', loss='categorical_crossentropy',
               metrics=['accuracy'])

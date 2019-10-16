@@ -6,11 +6,13 @@ from TagGraphEmbedding.TGEutils import *
 from numpy import *
 import tensorflow as tf
 import os
-import os
-os.environ["CUDA_VISIBLE_DEVICES"] = '0' #use GPU with ID=0
-config = tf.ConfigProto()
-config.gpu_options.per_process_gpu_memory_fraction = 0.5 # maximun alloc gpu50% of MEM
-config.gpu_options.allow_growth = True #allocate dynamically
+
+
+# os.environ["CUDA_VISIBLE_DEVICES"] = '0' #use GPU with ID=0
+# config = tf.ConfigProto()
+# config.gpu_options.per_process_gpu_memory_fraction = 0.5 # maximun alloc gpu50% of MEM
+# config.gpu_options.allow_growth = True #allocate dynamically
+
 # Initialize
 # x,cites,content,class_set,code_length = load_data(cites_path = './data/cited.txt',content_path = './data/content.txt')
 x, cites, content, class_set, code_length = load_data()
@@ -84,14 +86,17 @@ M = len(x[:])  # 2708
 trainX = np.array(___)
 trainY = np.array(x)[:, 1:].tolist()
 
-model = build_model(node_num, max_col, code_length)
-model.compile(optimizer='rmsprop', loss='categorical_crossentropy',
-              metrics=['accuracy'])
-model.fit(trainX.reshape(node_num, max_col, code_length),
-          np.array(trainY).reshape(node_num, 1, code_length),
-          batch_size=64,
-          epochs=10,
-          validation_split=0.2)
+def return_var():
+    return trainX, trainY
+
+# model = build_model(node_num, max_col, code_length)
+# model.compile(optimizer='rmsprop', loss='categorical_crossentropy',
+#               metrics=['accuracy'])
+# model.fit(trainX.reshape(node_num, max_col, code_length),
+#           np.array(trainY).reshape(node_num, code_length),
+#           batch_size=64,
+#           epochs=100,
+#           validation_split=0.2)
 
 # for i in order_set:  # K
 #     for j in i:

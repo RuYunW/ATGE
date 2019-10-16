@@ -3,6 +3,7 @@ from data_generate.data_generate_utils import *
 # Deviding the original dataset into program & describe two parts
 dataset = load_dataset('../data/test.json')  # list
 program, describe = fileDev(dataset)
+write(describe, '../data/describe.txt')
 
 # Conclude the Signature information from program
 method = conclude_signature(program)

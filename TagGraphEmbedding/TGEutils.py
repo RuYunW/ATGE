@@ -6,7 +6,7 @@ from keras.models import Sequential
 from keras.optimizers import Adam
 from keras.layers.convolutional import Conv1D, MaxPooling1D
 
-def load_data(cites_path = '../data/cited.txt',content_path = '../data/content.txt'):
+def load_data(cites_path = './data/cited.txt',content_path = './data/content.txt'):
 
     with open(content_path, 'r') as f1:
         lines = f1.readlines()
@@ -32,7 +32,6 @@ def load_data(cites_path = '../data/cited.txt',content_path = '../data/content.t
     return x, cites, content, class_set, code_length
 # load_data()
 
-# def LSTM():
 
 def front_node_garthing(x, cites, content, class_set):
     temp_frontnode = []
@@ -40,7 +39,6 @@ def front_node_garthing(x, cites, content, class_set):
     front_node = []
     front_code = []
     temp = []
-    # pure_code = []
 
     for node_id in np.array(x)[:, 0]:  # content第一列顺序
         for line in cites:
@@ -58,7 +56,6 @@ def front_node_garthing(x, cites, content, class_set):
 
         front_node.append(temp_frontnode)
         front_code.append(temp_frontcode)
-        # pure_code += temp_frontcode[1:-1]
 
         temp_frontnode = []
         temp_frontcode = []
@@ -189,35 +186,12 @@ def h_behind_cal(x,cites,content,class_set,h_behind):
 
 
 def build_model(nodenum, max_col, code_length):
-    # model = Sequential()
-    #
-    # model.add(LSTM(
-    #                units=256,
-    #                #return_sequences=True,
-    #                #batch_input_shape=(nodenum, timestep, code_length),
-    #                #activation='relu',
-    #                ))
-    # model.add(Dropout(0.2))
-    # model.add(Dense(units = code_length,activation = 'softmax'))
-    # #model.add(Dense(output_dim=code_length, activation='relu'))
-    # #model.add(Dropout(0.5))
-    # #model.add(LSTM(nodenum, return_sequences=True))
-    # #model.add(LSTM(code_length,return_sequences = True))
-    # #model.add(LSTM(code_length))
-    #
-    # #model.add(Dense(code_length,activation='relu'))
-    # #model.add(Dropout(0.2))
-    # #model.add(Dense(code_length,activation='softmax'))
-    # # model.add(Dropout(0.5))
-    # model.compile(loss='categorical_crossentropy',
-    #               optimizer=Adam(lr = 0.01),
-    #               metrics=['accuracy'])
-    # model.summary()
-    encoder_inputs = Input(shape=(max_col, code_length))
-    x = LSTM(128, activation='relu')(encoder_inputs)
-    x = LSTM(64, return_sequences=False)(x)
-    outputs = Dense(nodenum)(x)
 
+    encoder_inputs = Input(shape=(max_col, code_length))
+    x = LSTM(code_length, activation='softmax', return_sequences=True)(encoder_inputs)
+    x = Dense(code_length)(x)
+    x = LSTM(code_length,activation='softmax', return_sequences=False)(x)
+    outputs = Dense(code_length)(x)
 
     model = Model(encoder_inputs, outputs)
     return model
