@@ -1,13 +1,14 @@
 import numpy as np
 # from model import *
-from keras.layers import LSTM,Dense,Dropout,Embedding,Flatten,ConvLSTM2D
+from keras import Model
+from keras.layers import LSTM, Input, Dense, Dropout, Embedding, Flatten, ConvLSTM2D
 from keras.models import Sequential
 from keras.optimizers import Adam
-from keras.layers.convolutional import Conv1D,MaxPooling1D
+from keras.layers.convolutional import Conv1D, MaxPooling1D
 
 def load_data(cites_path = '../data/cited.txt',content_path = '../data/content.txt'):
 
-    with open(content_path,'r') as f1:
+    with open(content_path, 'r') as f1:
         lines = f1.readlines()
 
     x = []
@@ -15,24 +16,25 @@ def load_data(cites_path = '../data/cited.txt',content_path = '../data/content.t
         x.append(lines[i].split('\t')[0:-1])
     code_length = len(lines[0].split('\t')[1:-1])
     cites = []
-    with open(cites_path,'r') as f_cites:
+    with open(cites_path, 'r') as f_cites:
         lines = f_cites.readlines()
     for line in lines:
-        cites.append(line.replace('\n','').split('\t'))
+        cites.append(line.replace('\n', '').split('\t'))
 
     content = []
-    with open(content_path,'r') as f_co:
+    with open(content_path, 'r') as f_co:
         lines = f_co.readlines()
     for line in lines:
-        content.append(line.replace('\n','').split('\t'))
+        content.append(line.replace('\n', '').split('\t'))
 
-    class_set = set(np.array(content[:])[:,-1])
+    class_set = set(np.array(content[:])[:, -1])
+
     return x, cites, content, class_set, code_length
 # load_data()
 
 # def LSTM():
 
-def front_node_garthing(x,cites,content,class_set):
+def front_node_garthing(x, cites, content, class_set):
     temp_frontnode = []
     temp_frontcode = []
     front_node = []
@@ -42,9 +44,9 @@ def front_node_garthing(x,cites,content,class_set):
 
     for node_id in np.array(x)[:, 0]:  # content第一列顺序
         for line in cites:
-            if line[1] == node_id:
-                temp_frontnode.append(line[0])
-        # 找到所有前序节点temp_frontnode
+            if line[1] == node_id:  # 被指向节点==当前循环节点
+                temp_frontnode.append(line[0])  # 添加当前节点前向节点
+        # 找到所有前序节点temp_frontnode -- 对标x
 
         for cls in class_set:
             for line in content:
@@ -70,7 +72,7 @@ def ave(front_code):
         for j in i:  # each class
             # ___ is used to save one class ave value
             if len(j) >= 1:
-                ___.append((np.sum([k for k in j],axis=0)/len(j)).tolist())
+                ___.append((np.sum([k for k in j], axis=0)/len(j)).tolist())
         # each class ave has been calculated, saving in ___
         ave_code.append(___)
         ___ = []
@@ -186,43 +188,38 @@ def h_behind_cal(x,cites,content,class_set,h_behind):
     return behind_code
 
 
+def build_model(nodenum, max_col, code_length):
+    # model = Sequential()
+    #
+    # model.add(LSTM(
+    #                units=256,
+    #                #return_sequences=True,
+    #                #batch_input_shape=(nodenum, timestep, code_length),
+    #                #activation='relu',
+    #                ))
+    # model.add(Dropout(0.2))
+    # model.add(Dense(units = code_length,activation = 'softmax'))
+    # #model.add(Dense(output_dim=code_length, activation='relu'))
+    # #model.add(Dropout(0.5))
+    # #model.add(LSTM(nodenum, return_sequences=True))
+    # #model.add(LSTM(code_length,return_sequences = True))
+    # #model.add(LSTM(code_length))
+    #
+    # #model.add(Dense(code_length,activation='relu'))
+    # #model.add(Dropout(0.2))
+    # #model.add(Dense(code_length,activation='softmax'))
+    # # model.add(Dropout(0.5))
+    # model.compile(loss='categorical_crossentropy',
+    #               optimizer=Adam(lr = 0.01),
+    #               metrics=['accuracy'])
+    # model.summary()
+    encoder_inputs = Input(shape=(max_col, code_length))
+    x = LSTM(128, activation='relu')(encoder_inputs)
+    x = LSTM(64, return_sequences=False)(x)
+    outputs = Dense(nodenum)(x)
 
 
-
-def build_model(nodenum,timestep,code_length):
-    model = Sequential()
-    # model.add(Embedding(input_dim=node_num,output_dim=256,input_length=K*code_length))
-
-    # keras.layers.recurrent.LSTM(units, activation='tanh', recurrent_activation='hard_sigmoid', use_bias=True,
-    # kernel_initializer='glorot_uniform', recurrent_initializer='orthogonal', bias_initializer='zeros',
-    # unit_forget_bias=True, kernel_regularizer=None, recurrent_regularizer=None, bias_regularizer=None,
-    # activity_regularizer=None, kernel_constraint=None, recurrent_constraint=None, bias_constraint=None, dropout=0.0,
-    # recurrent_dropout=0.0)
-
-    model.add(Conv1D(filters = 32,kernel_size = 3,padding = 'same',activation = 'relu',batch_input_shape = (nodenum,timestep,code_length)))
-    model.add(MaxPooling1D(pool_size = 2))
-    model.add(LSTM(
-                   units=256,
-                   #return_sequences=True,
-                   #batch_input_shape=(nodenum, timestep, code_length),
-                   #activation='relu',
-                   ))
-    model.add(Dropout(0.2))
-    model.add(Dense(units = code_length,activation = 'softmax'))
-    #model.add(Dense(output_dim=code_length, activation='relu'))
-    #model.add(Dropout(0.5))
-    #model.add(LSTM(nodenum, return_sequences=True))
-    #model.add(LSTM(code_length,return_sequences = True))
-    #model.add(LSTM(code_length))
-    
-    #model.add(Dense(code_length,activation='relu'))
-    #model.add(Dropout(0.2))
-    #model.add(Dense(code_length,activation='softmax'))
-    # model.add(Dropout(0.5))
-    model.compile(loss='categorical_crossentropy',
-                  optimizer=Adam(lr = 0.01),
-                  metrics=['accuracy'])
-    model.summary()
+    model = Model(encoder_inputs, outputs)
     return model
 
 
