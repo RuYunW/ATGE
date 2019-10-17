@@ -13,7 +13,7 @@ import itertools
 
 # 读json文件
 def load_dataset(path):
-    with open(path,'r') as f:
+    with open(path, 'r') as f:
         data = f.readlines()
         # print(len(data))
         return data  # list
@@ -125,7 +125,7 @@ def cited2citing(input, output, method):
     row = len(method)
     # # list 2 dic
     dic = corpora.Dictionary(method)
-    dic.save_as_text('../data/dic.txt')
+    dic.save_as_text('./data/dic.txt')
     dic_set = dic.token2id
     # values = []
     # for word in method:
@@ -170,13 +170,13 @@ def write_cited(data, filename):
 
 
 def content_file_generation(node_onehot_code):
-    with open('../data/cited.txt', 'r') as f:
+    with open('./data/cited.txt', 'r') as f:
         lines = f.readlines()
         row = len(lines)
 
     node_list = []
 
-    with open('../data/dic.txt', 'r') as f_useless:
+    with open('./data/dic.txt', 'r') as f_useless:
         lines2 = f_useless.readlines()[1:]
         number = len(lines2)
         # print(number)
@@ -208,32 +208,33 @@ def content_file_generation(node_onehot_code):
     one_hot = node_onehot_code
 
     # 写之前，先检验文件是否存在，存在就删掉
-    filename2 = "../data/content.txt"
+    filename2 = "./data/content.txt"
     if os.path.exists(filename2):
         os.remove(filename2)
 
     print(len(node_list))
     # 以写的方式打开文件，如果文件不存在，就会自动创建
     file_write_obj = open(filename2, 'w')
+    isolate_list = []
     for var in range(number):
-        if len(node_list[var]) == 1:
+        if len(node_list[var]) == 1:  # ignore the isolated node
+            isolate_list.append(var)  # append index to list, in order to ignore its matching NL in main program
             continue
         else:
-            file_write_obj.write(str(var+1)+"\t")
+            file_write_obj.write(str(lines2[var]).split('\t')[0]+"\t")  # add the node dic index
             for i in one_hot[var]:
-                file_write_obj.writelines(str(int(i))+"\t")
-            file_write_obj.write(str(random.randint(1, 5))+'\n')
+                file_write_obj.writelines(str(int(i))+"\t")  # add the one-hot code of node
+            file_write_obj.write(str(random.randint(1, 5))+'\n')  # add the class of node, temporarily generate randomly
     file_write_obj.close()
+    return isolate_list
 
 
 def get_node_onehot(node_input, node_output):
-    # 调用函数，读取数据
-    # node_name, node_input, node_output = readfile(path)
+
     class_set = set(list(itertools.chain.from_iterable(node_input+node_output)))  # 将list变为一维，同时转换为set去重
     node_token_index = dict([(cls, i) for i, cls in enumerate(class_set)])
     node_onehot_code = np.zeros(
-        (len(node_input), len(class_set)),
-        dtype='float16')
+        (len(node_input), len(class_set)), dtype='float16')
 
     for i in range(len(node_input)):
         for j in range(len(node_input[i])):

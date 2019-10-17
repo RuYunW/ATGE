@@ -2,6 +2,7 @@ import numpy as np
 from model import *
 from data_generate.data_generate_utils import get_node_onehot
 from TagGraphEmbedding.TGEmodel import return_var
+from data_generate.main import get_drop_list
 # from model_seq2seq import Seq2seq
 
 # os.environ["CUDA_VISIBLE_DEVICES"] = '0' #use GPU with ID=0
@@ -50,7 +51,7 @@ def doc_to_seq(docs):
     return seqs, w2i, i2w
 
 
-# 将 整理好的 input 转换为添加了 padding 的 index 形式
+# 将整理好的 input 转换为添加了 padding 的 index 形式
 def add_padding(docs_source):
     # 生成单词表
     w2i_source, i2w_source = make_vocab(docs_source)
@@ -68,17 +69,27 @@ def add_padding(docs_source):
 
 
 inputNL, input_onehot, output_onehot = load_data('./data/describe.txt')
+
+def ignore_NL(inputNL, pop_list, isolate_list):
+    for i in range(len(pop_list) - 1, -1, -1):
+        inputNL.pop(pop_list[i])
+    for i in range(len(isolate_list)-1, -1, -1):
+        inputNL.pop(isolate_list[i])
+
+    return inputNL
+
+
+pop_list, isolate_list = get_drop_list()
+inputNL = ignore_NL(inputNL, pop_list, isolate_list)
+
 source_batch, max_source_len = add_padding(inputNL)
 
 encoder_input_data = source_batch
-
-print(len(inputNL))
-print(len(output_onehot))
-print(len(input_onehot))
+for i in encoder_input_data:
+    print(i)
 
 exit()
 
-node_onehot = get_node_onehot('./data/method_io.xlsx')  # 获取节点 one-hot 编码
 model = build_test_model(max_source_len, max_target_len, len(encoder_input_data), len(decoder_input_data))
 model.compile(optimizer='rmsprop', loss='categorical_crossentropy',
               metrics=['accuracy'])
