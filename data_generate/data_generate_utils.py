@@ -78,39 +78,48 @@ def generate_io(data):
     inlist = []
     outlist = []
     method_list = []
+    t = 0
 
     for line in lines:
-        method = str(line).replace('public ','').replace('static ','').replace('@Override ','').replace('private ','').replace('@Deprecated ','').replace('final ','').replace('\n','').replace('@deprecated ','').replace('protected ','').replace('@ShortType ','').replace('@VisibleForTesting ','')
-        method = re.sub('@(.*) ','',method)
-        input = re.findall(r' .*?\((.*?)\){',method)
-        output = re.findall(r'(.*?) .*?\(.*?\){',method)
+        method = str(line).replace('public ', '').replace('static ','').replace('@Override ', '').replace('private ', '').replace('@Deprecated ', '').replace('final ', '').replace('\n', '').replace('@deprecated ', '').replace('protected ', '').replace('@ShortType ', '').replace('@VisibleForTesting ', '')
+        method = re.sub('@(.*) ', '', method)
+        input = re.findall(r' .*?\((.*?)\){', method)
+        output = re.findall(r'(.*?) .*?\(.*?\){', method)
         input_class = []
         for i in str(input).split(','):
-            input_class.append(i.split(' ')[0].replace('[','').replace(']','').replace('\'',''))
+            input_class.append(i.split(' ')[0].replace('[', '').replace(']', '').replace('\'', ''))
         inlist.append(input_class)
         outlist.append(output)
         method_name = re.findall(r'.*? (.*?)\(.*?\)', method)
-        method_list.append(method_name)
+        if len(method_name) > 0:
+            method_name[0] += str(t)
+        t += 1
+        # print(method_name)
 
+        method_list.append(method_name)
+    print(len(method_list))  # 3000
 
     # 去空
     i = 0
+    pop_list = []  # to store the index of popped item
     while i < len(method_list):
-        if len(inlist[i]) == 0 or len(outlist[i]) == 0 or len(method_list[i]) == 0 \
-                or inlist[i] == None or outlist[i] == None or method_list[i] == None:
+        if len(inlist[i]) == 0 or len(outlist[i]) == 0 or len(method_list[i]) == 0:
             method_list.pop(i)
             inlist.pop(i)
             outlist.pop(i)
+            pop_list.append(i)
             i -= 1
         i += 1
+    print(len(method_list))
 
-    return inlist, outlist, method_list
+    return inlist, outlist, method_list, pop_list
 
 
 '''
 将数据集转化为cora.cite格式，
 cited_paper_id \t citing_paper_id
 '''
+
 
 def cited2citing(input, output, method):
     row = len(method)
@@ -125,7 +134,8 @@ def cited2citing(input, output, method):
     final = []
     for i in range(row):
         for ins in input[i]:
-            if ins == 'int' or ins == 'char' or ins =='long' or ins == 'float' or ins=='double' or ins=='boolean' or ins == "String" or ins == 'Object' or ins == 'byte':
+            if ins == 'int' or ins == 'char' or ins == 'long' or ins == 'float' or ins == 'double' or ins == 'boolean' \
+                    or ins == "String" or ins == 'Object' or ins == 'byte':
                 # print("skip")
                 continue
             for j in range(row):
@@ -136,9 +146,10 @@ def cited2citing(input, output, method):
                     cited_id = dic_set[cited_name]
                     citing_id = dic_set[citing_name]
                     final.append(str(cited_id)+'\t'+str(citing_id)+'\n')
-        print(i/row)
-    print("文件计算完毕")
+        # print(i/row)
+    # print("文件计算完毕")
     return final
+
 
 def write_cited(data, filename):
     # 写之前，先检验文件是否存在，存在就删掉
@@ -153,45 +164,47 @@ def write_cited(data, filename):
     file_write_obj.close()
 
 
-
 '''
 将数据转换为content格式
 '''
 
 
-
 def content_file_generation(node_onehot_code):
-    with open('../data/cited.txt','r') as f:
+    with open('../data/cited.txt', 'r') as f:
         lines = f.readlines()
         row = len(lines)
 
-    node = []
     node_list = []
-    # for i in range(row):
-    #     ins,outs = lines[i].split('\t')
 
-    with open('../data/dic.txt','r') as f_useless:
-        lines2 = f_useless.readlines()
+    with open('../data/dic.txt', 'r') as f_useless:
+        lines2 = f_useless.readlines()[1:]
         number = len(lines2)
+        # print(number)
 
-    #     # 24928
+    node = []  # temp list to store order set
+    for i in range(number):  # dic length
+        for j in range(row):  # cited length
+            # traver front node
+            if str(lines2[i]).split('\t')[0] == str(lines[j].split('\t')[1].replace('\n', '')):
+                node.append(lines[j].split('\t')[0].replace('\n', ''))
+                if str(i+1) != str(lines[j+1].split('\t')[1]):  # the cited file is sorted with citing index
+                    break  # if the latter index has been scanned not match, this node traversing finished
+        node.append(lines2[i].split('\t')[0])
+        # traverse behind node
+        for j in range(row):
+            if str(lines2[i]).split('\t')[0] == str(lines[j].split('\t')[0]):
+                node.append(lines[j].split('\t')[1].replace('\n', ''))
 
-    for i in range(number):
-        for j in range(len(lines)):
-            # input
-            if str(i+1) == str(lines[j].split('\t')[1]):
-                node.append(lines[j].split('\t')[0].replace('\n',''))
-                if str(i+1) != str(lines[j+1].split('\t')[1]):
-                    break
-        node.append(i+1)
-        for j in range(len(lines)):
-            if str(i+1) == str(lines[j].split('\t')[0]):
-                node.append(lines[j].split('\t')[1].replace('\n',''))
-        # print(node)
         node_list.append(node)
         node = []
+    #
+    # j = 0
+    # for i in range(len(node_list)):
+    #     if len(node_list[i]) > 1:
+    #         print(node_list[i])
+    #         j+=1
+    # print(j)
 
-    # 生成content
     one_hot = node_onehot_code
 
     # 写之前，先检验文件是否存在，存在就删掉
@@ -199,24 +212,18 @@ def content_file_generation(node_onehot_code):
     if os.path.exists(filename2):
         os.remove(filename2)
 
-
+    print(len(node_list))
     # 以写的方式打开文件，如果文件不存在，就会自动创建
     file_write_obj = open(filename2, 'w')
-    for var in range(len(one_hot)):
-        if np.sum(one_hot[var]) == 1:
+    for var in range(number):
+        if len(node_list[var]) == 1:
             continue
         else:
             file_write_obj.write(str(var+1)+"\t")
             for i in one_hot[var]:
                 file_write_obj.writelines(str(int(i))+"\t")
-            file_write_obj.write(str(random.randint(1,5))+'\n')
+            file_write_obj.write(str(random.randint(1, 5))+'\n')
     file_write_obj.close()
-
-
-
-
-# This file is to generate the node code with onehot
-
 
 
 def get_node_onehot(node_input, node_output):

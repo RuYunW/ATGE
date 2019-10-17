@@ -9,10 +9,10 @@ write(describe, '../data/describe.txt')
 method = conclude_signature(program)
 
 # make the method into three parts
-inlist, outlist, method_list = generate_io(method)
+inlist, outlist, method_list, pop_list = generate_io(method)
 
 
-# using iolist generate node ont-hot code
+# using iol ist generate node ont-hot code
 node_onehot_code = get_node_onehot(inlist, outlist)
 
 # generate the node info into cited2citing(cites) file
@@ -21,6 +21,5 @@ write_cited(cc, '../data/cited.txt')
 
 # generate the node info into content file
 content_file_generation(node_onehot_code)
-
 
 
