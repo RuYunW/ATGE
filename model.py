@@ -1,16 +1,23 @@
 # from keras.layers import LSTM,Dense,Embedding
 from keras import Model
-from keras.layers import Input, LSTM, Dense
+from keras.layers import Input, LSTM, Dense, Dropout
 
-def build_test_model(max_source_len, max_target_len, encoder_len, decoder_len):
-    encoder_inputs = Input(shape=(1, max_source_len))
-    encoder = LSTM(max_source_len, return_state=True)(encoder_inputs)
-    encoder_outputs, state_h, state_c = encoder(encoder_inputs)
+def build_test_model(max_source_len, node_num, max_col, code_length):
+    encoder_inputs = Input(shape=(max_source_len, 1))
+    encoder_outputs, state_h, state_c = LSTM(code_length, return_state=True)(encoder_inputs)
+
     encoder_state = [state_h, state_c]
+    input_onehot = Input(shape=(max_col, code_length))
+    x = LSTM(code_length, activation='relu', return_sequences=True)(input_onehot)
+    x = LSTM(code_length, activation='softmax', return_sequences=False)(x, initial_state=encoder_state)
+    x = Dense(code_length)(x)
+    x = Dropout(0.2)(x)
+    x = Dense(code_length)(x)
+    x = Dropout(0.2)(x)
+    output_onehot = Dense(code_length)(x)
 
-    outputs = LSTM(max_target_len-2, activation='relu', return_sequences=True)(x)
 
-    model = Model(encoder_inputs, outputs)
+    model = Model([encoder_inputs, input_onehot], output_onehot)
     return model
 
 # def build_model(num_encoder_tokens, num_decoder_tokens, latent_dim):

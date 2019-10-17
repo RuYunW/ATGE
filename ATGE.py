@@ -82,22 +82,27 @@ def ignore_NL(inputNL, pop_list, isolate_list):
 pop_list, isolate_list = get_drop_list()
 inputNL = ignore_NL(inputNL, pop_list, isolate_list)
 
+print("inputNL")
 source_batch, max_source_len = add_padding(inputNL)
 
 encoder_input_data = source_batch
-for i in encoder_input_data:
-    print(i)
 
-exit()
+node_num = len(inputNL)
+max_col = len(input_onehot[0])
+code_length = len(input_onehot[0][0])
 
-model = build_test_model(max_source_len, max_target_len, len(encoder_input_data), len(decoder_input_data))
+
+
+print("Build Model")
+model = build_test_model(max_source_len, node_num, max_col, code_length)
 model.compile(optimizer='rmsprop', loss='categorical_crossentropy',
               metrics=['accuracy'])
 # encoder_input_data = np.array(encoder_input_data).reshape(len(encoder_input_data),-1)
-model.fit(np.array(encoder_input_data).reshape(len(encoder_input_data), 1, max_source_len),
-          np.array(decoder_target_data).reshape(len(decoder_input_data), 1, max_target_len-2),
-          batch_size=64,
-          epochs=10,
+model.fit([np.array(encoder_input_data).reshape(len(encoder_input_data), max_source_len, 1),
+           np.array(input_onehot).reshape(node_num, max_col, code_length)],
+          np.array(output_onehot).reshape(node_num, code_length),
+          batch_size=128,
+          epochs=20,
           validation_split=0.2)
 
 # Save model
