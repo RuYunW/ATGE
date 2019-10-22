@@ -14,7 +14,7 @@ def build_test_model(max_source_len, node_num, max_col, code_length):
     x = Dropout(0.2)(x)
     x = Dense(code_length)(x)
     x = Dropout(0.2)(x)
-    output_onehot = Dense(code_length)(x)
+    output_onehot = Dense(code_length, activation='softmax')(x)
 
 
     model = Model([encoder_inputs, input_onehot], output_onehot)

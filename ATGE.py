@@ -13,7 +13,7 @@ from data_generate.main import get_drop_list
 # 生成真实的 input 和 output，存储于 list
 def load_data(source_path):
     inputNL = []
-    with open(source_path,'r') as fs:
+    with open(source_path, 'r') as fs:
         lines = fs.readlines()
         for line in lines:
             inputNL.append(line)
@@ -64,7 +64,7 @@ def add_padding(docs_source):
         source_seq = [w2i_source[w] for w in docs_source[i]] + [w2i_source["_PAD"]] * (
                     max_source_len - len(docs_source[i]))
         source_batch.append(source_seq)
-
+    print(source_batch[1])
     return source_batch, max_source_len
 
 
@@ -102,11 +102,15 @@ model.fit([np.array(encoder_input_data).reshape(len(encoder_input_data), max_sou
            np.array(input_onehot).reshape(node_num, max_col, code_length)],
           np.array(output_onehot).reshape(node_num, code_length),
           batch_size=128,
-          epochs=20,
+          epochs=50,
           validation_split=0.2)
 
 # Save model
 model.save('s2s.h5')
 
+preds = model.predict([np.array(encoder_input_data[0]).reshape(1, max_source_len, 1),
+           np.array(input_onehot[0]).reshape(1, max_col, code_length)])
 
+for i in preds:
+    print(i)
 
